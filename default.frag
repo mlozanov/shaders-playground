@@ -4,6 +4,7 @@
 uniform vec4 termCoeff;
 uniform vec4 colorDiffuse;
 uniform vec4 colorSpecular;
+uniform vec4 rimCoeff;
 
 varying vec3 normal, lightDir, eyeVec, vVertex;
 
@@ -34,11 +35,12 @@ void main (void)
 	vec4 diffuseTerm = colorDiffuse * vec4(vec3(att * lambertTerm * termCoeff.x), 1.0);		
 	vec4 specularTerm = colorSpecular * vec4(att * termCoeff.y * vec3(specular),1.0);
 
-	vec4 rimTerm = att * colorDiffuse * vec4(vec3(halfLambert(N,-L)),1.0);
-	//rimTerm *= rimTerm;
+	vec4 rimTerm = att * pow( 1.0 - dot(N, E), rimCoeff.w ) * rimCoeff.xyzw; // * rimCoeff.w;
 
-	gl_FragColor = baseColor + diffuseTerm + specularTerm;
+	gl_FragColor = baseColor + diffuseTerm + specularTerm + rimTerm;
 
+	// debug 
+	//gl_FragColor = vec4(vec3(rimTerm), 1.0);
 	//gl_FragColor = vec4(vec3(halfLambert(N,L)),1.0);	
 }
 
