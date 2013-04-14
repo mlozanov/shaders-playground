@@ -5,7 +5,8 @@ uniform vec4 colorDiffuse;
 uniform vec4 colorSpecular;
 uniform vec4 rimCoeff;
 
-in vec3 normal, lightDir, eyeVec, vVertex;
+in vec3 normal, lightDir, eyeVec; //, vVertex;
+
 out vec4 Color;
 
 float halfLambert(in vec3 vect1, in vec3 vect2)

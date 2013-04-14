@@ -1,17 +1,23 @@
 #version 150 core
 
-uniform sampler2D tex;
-uniform vec4 params;
+in vec3 texcoord;
+in vec3 outNormal;
 
-in vec2 texcoord;
+uniform sampler2D fb;
 
 out vec4 Color;
 
+vec3 reinhard(vec3 x)
+{
+    return (x/(vec3(1)+x));
+}
+
 void main()
 {
-	float pixel = (1.0 + sin(3.14 * texcoord.x * 16.0))*0.25 + (1.0 + cos(3.14 * texcoord.y * 16.0))*0.25;
+	float pixel = (1.0 + sin(3.14 * texcoord.x * 2.0))*0.25 + (1.0 + cos(3.14 * texcoord.y * 2.0))*0.25;
 
-	vec4 clr = vec4(vec3(pixel), 1.0);
+    vec4 texel = texture(fb,texcoord.xy + vec2(0.5,0.5));
+    //pixel = texcoord.x; // + texcoord.y / 1024;
 
-	Color = clr;
+	Color = texel + vec4(texcoord,1.0); // + vec4( reinhard(texel.xyz+vec3(10*pixel)), 1.0);
 }
