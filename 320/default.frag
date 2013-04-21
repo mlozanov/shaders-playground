@@ -33,8 +33,8 @@ void main (void)
 	float lambertTerm = (max(0.0, dot(N,L)) + wrap) / (1.0 + wrap);
 	float specular = pow( max(0.0, dot(R, E)), 128.0 );
 
-	vec4 diffuseTerm = colorDiffuse * vec4(vec3(att * lambertTerm * termCoeff.x), 1.0);		
-	vec4 specularTerm = colorSpecular * vec4(att * termCoeff.y * vec3(specular),1.0);
+	vec4 diffuseTerm = 1.0 * colorDiffuse * vec4(vec3(att * lambertTerm * termCoeff.x), 1.0);		
+	vec4 specularTerm = 1.0 * colorSpecular * vec4(att * termCoeff.y * vec3(specular),1.0);
 
 	vec4 rimTerm = att * pow( 1.0 - dot(N, E), rimCoeff.w ) * rimCoeff.xyzw; // * rimCoeff.w;
 
