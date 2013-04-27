@@ -5,7 +5,7 @@ uniform vec4 colorDiffuse;
 uniform vec4 colorSpecular;
 uniform vec4 rimCoeff;
 
-in vec3 normal, lightDir, eyeVec; //, vVertex;
+in vec3 normal, lightDir, eyeVec, vVertex;
 
 out vec4 Color;
 
@@ -40,8 +40,9 @@ void main (void)
 
 	Color = baseColor + diffuseTerm + specularTerm + rimTerm;
 
+	//Color.w = vVertex.z;
 	// debug 
 	//gl_FragColor = vec4(vec3(rimTerm), 1.0);
-	//gl_FragColor = vec4(vec3(halfLambert(N,L)),1.0);	
+	//Color = vec4(vec3(halfLambert(N,L)),1.0);	
 }
 
