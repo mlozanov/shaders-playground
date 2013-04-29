@@ -9,25 +9,26 @@ in vec3 normal, lightDir, eyeVec, vVertex;
 
 out vec4 Color;
 
+const vec3 sunlightDirection = vec3(0.0,0.0,-1.0);
+
 float halfLambert(in vec3 vect1, in vec3 vect2)
 {
     float product = dot(vect1,vect2);
     return product * 0.5 + 0.5;
 }
 
-void main (void)
+vec4 pixelLit(in vec3 lightDirection, bool isDirectional)
 {
-	//vec4 final_color = vec4(0.18,0.18,0.18,1.0); 
 	vec4 baseColor = vec4(0.0,0.0,0.0,1.0); 
 						
 	vec3 N = normalize(normal);
-	vec3 L = normalize(lightDir);
+	vec3 L = normalize(lightDirection);
 	vec3 E = normalize(eyeVec);
 	vec3 R = reflect(-L, N);
 
-	float dist = length(lightDir);
+	float dist = isDirectional ? 1.0 : length(lightDirection);
 
-	float att = 1.0 / (1.0 + termCoeff.z * dist + termCoeff.w * dist * dist);
+	float att = isDirectional ? 1.0 : (1.0 / (1.0 + termCoeff.z * dist + termCoeff.w * dist * dist));
 	
 	float wrap = 0.3;
 	float lambertTerm = (max(0.0, dot(N,L)) + wrap) / (1.0 + wrap);
@@ -38,7 +39,14 @@ void main (void)
 
 	vec4 rimTerm = att * pow( 1.0 - dot(N, E), rimCoeff.w ) * rimCoeff.xyzw; // * rimCoeff.w;
 
-	Color = baseColor + diffuseTerm + specularTerm + rimTerm;
+	return (baseColor + diffuseTerm + specularTerm + rimTerm);
+}
+
+void main (void)
+{
+	//vec4 final_color = vec4(0.18,0.18,0.18,1.0); 
+
+	Color = pixelLit(lightDir, false) +  pixelLit(sunlightDirection, true);
 
 	//Color.w = vVertex.z;
 	// debug 

@@ -81,7 +81,7 @@ void main()
 
     //vec4 texel = convolution9(fb, texcoord.xy);
 
-    vec3 tonemappedPixel = tonemap(1.0 * texel.xyz);
+    vec3 tonemappedPixel = u2(0.1 * texel.xyz);
 	Color = vec4(tonemappedPixel, 1.0); // + 0.2 * vec4(texcoord,1.0); // + vec4( reinhard(texel.xyz+vec3(10*pixel)), 1.0);
 
     //gl_FragDepth = 1.0;
