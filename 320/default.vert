@@ -11,7 +11,7 @@ uniform mat4 localRotationMatrix;
 in vec3 in_Position;
 in vec3 in_Normal;
 
-out vec3 normal, lightDir, eyeVec, vVertex;
+out vec3 normal, lightDir, eyeVec, worldVertex;
 
 void main()
 {	
@@ -29,10 +29,10 @@ void main()
     vec4 position = localRotationMatrix * vec4(in_Position,1.0);
 
 	vec3 vLightPosition = lightPos.xyz;
-	vVertex = (pvm * position).xyz;
+	worldVertex = (vm * position).xyz;
 
-	lightDir = (vLightPosition - vVertex);
-	eyeVec = normalize(cameraPos.xyz - vVertex);
+	lightDir = (vLightPosition - worldVertex);
+	eyeVec = normalize(cameraPos.xyz - worldVertex);
 
 	gl_Position = pvm * position;
 }
