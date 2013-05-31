@@ -8,6 +8,8 @@ uniform vec4 rimCoeff;
 in vec3 normal, lightDir, eyeVec, worldVertex;
 
 out vec4 Color;
+out vec4 Lighting;
+out vec4 Bloom;
 
 const vec3 sunlightDirection = vec3(0.0,0.0,-1.0);
 
@@ -47,6 +49,10 @@ void main (void)
 	//vec4 final_color = vec4(0.18,0.18,0.18,1.0); 
 
 	Color = pixelLit(lightDir, false) +  pixelLit(sunlightDirection, true);
+
+	Lighting = pixelLit(sunlightDirection, true);
+
+	Bloom = pixelLit(lightDir, false);
 
 	//Color.w = vVertex.z;
 	// debug 

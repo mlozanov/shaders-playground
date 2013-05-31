@@ -76,12 +76,12 @@ void main()
 {
 	float pixel = (1.0 + sin(3.14 * texcoord.x * 2.0))*0.25 + (1.0 + cos(3.14 * texcoord.y * 2.0))*0.25;
 
-    vec4 texel = texture(fb,texcoord.xy);
-    //pixel = texcoord.x; // + texcoord.y / 1024;
+  vec4 texel = texture(fb,texcoord.xy);
+  //pixel = texcoord.x; // + texcoord.y / 1024;
 
-    //vec4 texel = convolution9(fb, texcoord.xy);
+  //vec4 texel = convolution9(fb, texcoord.xy);
 
-    vec3 tonemappedPixel = u2(0.05 * texel.xyz);
+  vec3 tonemappedPixel = u2(0.08 * texel.xyz);
 	Color = vec4(tonemappedPixel, 1.0); // + 0.2 * vec4(texcoord,1.0); // + vec4( reinhard(texel.xyz+vec3(10*pixel)), 1.0);
 
     //gl_FragDepth = 1.0;
