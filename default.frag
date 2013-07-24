@@ -35,7 +35,9 @@ void main (void)
 	vec4 diffuseTerm = colorDiffuse * vec4(vec3(att * lambertTerm * termCoeff.x), 1.0);		
 	vec4 specularTerm = colorSpecular * vec4(att * termCoeff.y * vec3(specular),1.0);
 
-	vec4 rimTerm = att * pow( 1.0 - dot(N, E), rimCoeff.w ) * rimCoeff.xyzw; // * rimCoeff.w;
+	vec4 rimTerm;
+	rimTerm.xyz = att * pow( 1.0 - dot(N, E), rimCoeff.w ) * rimCoeff.xyz; // * rimCoeff.w;
+	rimTerm.w = 1.0;
 
 	gl_FragColor = baseColor + diffuseTerm + specularTerm + rimTerm;
 

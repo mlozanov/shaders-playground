@@ -39,16 +39,22 @@ vec4 pixelLit(in vec3 lightDirection, bool isDirectional)
 	vec4 diffuseTerm = 1.0 * colorDiffuse * vec4(vec3(att * lambertTerm * termCoeff.x), 1.0);		
 	vec4 specularTerm = 1.0 * colorSpecular * vec4(att * termCoeff.y * vec3(specular),1.0);
 
-	vec4 rimTerm = att * pow( 1.0 - dot(N, E), rimCoeff.w ) * rimCoeff.xyzw; // * rimCoeff.w;
+	vec4 rimTerm;
+	rimTerm.xyz = att * pow( 1.0 - dot(N, E), rimCoeff.w ) * rimCoeff.xyz; // * rimCoeff.w;
+	rimTerm.w = 1.0;
 
-	return (baseColor + diffuseTerm + specularTerm + rimTerm);
+	vec4 finalColor = (baseColor + diffuseTerm + specularTerm + rimTerm);
+
+	finalColor.a = 1.0;
+
+	return finalColor;
 }
 
 void main (void)
 {
 	//vec4 final_color = vec4(0.18,0.18,0.18,1.0); 
 
-	Color = pixelLit(lightDir, false) +  pixelLit(sunlightDirection, true);
+	Color = pixelLit(sunlightDirection, true);
 
 	Lighting = pixelLit(sunlightDirection, true);
 
