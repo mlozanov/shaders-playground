@@ -6,6 +6,7 @@ uniform vec4 colorSpecular;
 uniform vec4 rimCoeff;
 
 in vec3 normal, lightDir, eyeVec, worldVertex;
+in float depth;
 
 out vec4 Color;
 out vec4 Lighting;
@@ -50,15 +51,24 @@ vec4 pixelLit(in vec3 lightDirection, bool isDirectional)
 	return finalColor;
 }
 
+vec4 albedo()
+{
+	vec4 baseColor = vec4(0.0, 0.0, 0.0, 1.0);
+
+	vec4 finalColor = baseColor + 1.0 * colorDiffuse;
+
+	return finalColor;
+}
+
 void main (void)
 {
 	//vec4 final_color = vec4(0.18,0.18,0.18,1.0); 
 
-	Color = pixelLit(sunlightDirection, true);
+	Color = albedo();
 
 	Lighting = pixelLit(sunlightDirection, true);
 
-	Bloom = pixelLit(lightDir, false);
+	Bloom = vec4(vec3(depth), 1.0);
 
 	//Color.w = vVertex.z;
 	// debug 

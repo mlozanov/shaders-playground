@@ -12,6 +12,10 @@ in vec3 in_Position;
 in vec3 in_Normal;
 
 out vec3 normal, lightDir, eyeVec, worldVertex;
+out float depth;
+
+const float near = 1.0;
+const float far = 1024.0;
 
 void main()
 {	
@@ -35,4 +39,6 @@ void main()
 	eyeVec = normalize(cameraPos.xyz - worldVertex);
 
 	gl_Position = pvm * position;
+
+    depth = (gl_Position.z - near) * (1.0 / (far - near));
 }

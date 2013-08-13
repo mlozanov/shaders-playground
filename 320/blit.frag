@@ -3,7 +3,9 @@
 in vec3 texcoord;
 in vec3 outNormal;
 
-uniform sampler2D fb;
+uniform sampler2D albedo;
+uniform sampler2D lighting;
+uniform sampler2D bloom;
 
 out vec4 Color;
 
@@ -30,16 +32,16 @@ vec3 u2(vec3 x)
     return ((x*(A*x+C*B)+D*E)/(x*(A*x+B)+D*F))-E/F;
 }
 
-vec4 blur()
+vec4 blur(in sampler2D tx)
 {
     float _c = 1.0/1024.0;
 
-    vec4 c = texture(fb, texcoord.xy);
+    vec4 c = texture(tx, texcoord.xy);
 
-    vec4 c0 = texture(fb, texcoord.xy + vec2(0, 1) * _c);
-    vec4 c1 = texture(fb, texcoord.xy + vec2(0,-1) * _c);
-    vec4 c2 = texture(fb, texcoord.xy + vec2(-1,0) * _c);
-    vec4 c3 = texture(fb, texcoord.xy + vec2( 1,0) * _c);
+    vec4 c0 = texture(tx, texcoord.xy + vec2(0, 1) * _c);
+    vec4 c1 = texture(tx, texcoord.xy + vec2(0,-1) * _c);
+    vec4 c2 = texture(tx, texcoord.xy + vec2(-1,0) * _c);
+    vec4 c3 = texture(tx, texcoord.xy + vec2( 1,0) * _c);
 
     return (c + c0 + c1 + c2 + c3) * 0.25; 
 }
@@ -76,8 +78,10 @@ void main()
 {
 	float pixel = (1.0 + sin(3.14 * texcoord.x * 2.0))*0.25 + (1.0 + cos(3.14 * texcoord.y * 2.0))*0.25;
 
-  vec4 texel = texture(fb,texcoord.xy);
+  vec4 albedoSample = texture(albedo, texcoord.xy);
+  vec4 lightingSample = texture(lighting, texcoord.xy);
+  vec4 bloomSample = texture(bloom, texcoord.xy); // blur(bloom);
 
-  vec3 tonemappedPixel = tonemap(1.0 * texel.xyz);
+  vec3 tonemappedPixel = 1.0 - bloomSample.xxx; //reinhard(1.0 * lightingSample.xxx);
 	Color = vec4(tonemappedPixel, 1.0);
 }
